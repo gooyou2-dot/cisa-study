@@ -1,0 +1,692 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>CISA STUDY COMMAND CENTER</title>
+  <meta name="description" content="Light, easy-on-the-eyes CISA study app with no-repeat pools, importable question packs, gamification, analytics, weak-area drills, and optional AI hand-off. Offline-first." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Orbitron:wght@600;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #F8F9FA; --surface: #ffffff; --text: #2C3E50; --muted: #5f6e7a;
+      --primary: #B0D0E9; --secondary: #D1C4E9; --tertiary: #FFF1DE; --ring: rgba(176,208,233,.65);
+      --ok:#2e7d32; --warn:#b26a00; --err:#c62828; --shadow:0 6px 24px rgba(34,53,78,.08); --radius:14px;
+      --toast-bg: rgba(44,62,80,.92); --toast-fg:#fff; --backdrop: rgba(0,0,0,.35);
+    }
+    body.theme-celestial { --bg:#E3F2FD; --surface:#fff; --text:#546E7A; --muted:#6e8792; --primary:#A7C9CC; --secondary:#F4B8C1; --tertiary:#C8E6C9; --ring:rgba(167,201,204,.65); --toast-bg: rgba(84,110,122,.95); }
+    body.theme-dark { --bg:#0f1419; --surface:#111a22; --text:#e8f0f6; --muted:#a0b3c2; --primary:#6fb1ff; --secondary:#a793ff; --tertiary:#ffe6b0; --ring:rgba(111,177,255,.45); --shadow:0 10px 30px rgba(0,0,0,.35); --toast-bg: rgba(20,28,35,.95); }
+    *{box-sizing:border-box} html,body{height:100%}
+    body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Helvetica,Arial,sans-serif;color:var(--text);
+      background: radial-gradient(1200px 600px at 10% 0%, var(--tertiary) 0%, transparent 35%),
+                  radial-gradient(900px 500px at 100% 20%, var(--secondary) 0%, transparent 40%), var(--bg);
+      line-height:1.7; transition: background .3s ease, color .3s ease;}
+    .container{max-width:1100px;margin:0 auto;padding:24px 16px}
+    h1,h2,h3,h4{font-family:Orbitron,Inter,sans-serif;letter-spacing:.5px}
+    h1{font-size:clamp(28px,4vw,38px);margin:4px 0 6px} h2{font-size:22px}
+    .card{background:var(--surface);border:1px solid rgba(0,0,0,.06);border-radius:var(--radius);box-shadow:var(--shadow);padding:20px}
+    .grid{display:grid;gap:16px} .grid.stats{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+    .stat{border-left:6px solid var(--primary)} .stat .num{font-size:28px;font-weight:800} .stat .lbl{color:var(--muted);font-size:13px}
+    .controls{display:flex;flex-wrap:wrap;gap:12px;align-items:center}
+    .select,.btn{height:44px;border-radius:12px;border:1px solid rgba(0,0,0,.12);padding:0 14px;font-weight:600;color:var(--text);background:var(--surface);font-family:inherit;font-size:14px}
+    .btn{cursor:pointer;box-shadow:var(--shadow)} .btn.primary{background:linear-gradient(180deg,var(--primary),color-mix(in srgb,var(--primary),black 10%));border-color:transparent}
+    .btn.secondary{background:linear-gradient(180deg,var(--secondary),color-mix(in srgb,var(--secondary),black 10%));border-color:transparent}
+    .btn.ghost{background:var(--surface)} .btn.danger{background:#ffe5e7;color:#8b1f1f;border-color:rgba(198,40,40,.25)}
+    .btn:focus-visible,.select:focus-visible{outline:3px solid var(--ring);outline-offset:2px}
+    .row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+    .progress-wrap{margin:4px 0 14px} .progress{width:100%;height:10px;border-radius:999px;background:rgba(0,0,0,.08);overflow:hidden}
+    .bar{height:100%;width:0%;background:linear-gradient(90deg,var(--secondary),var(--primary));transition:width .4s ease}
+    .answers{margin-top:10px} .answer{width:100%;text-align:left;padding:14px;margin:8px 0;background:linear-gradient(180deg,#fff,#fafafa);border:1px solid rgba(0,0,0,.08);border-radius:12px;cursor:pointer;font-weight:600;font-size:15px}
+    .answer:hover{border-color:var(--primary)} .answer[aria-disabled="true"]{opacity:.65;cursor:not-allowed}
+    .answer.correct{border-color:var(--ok);background:#e8f5e9} .answer.incorrect{border-color:var(--err);background:#ffebee}
+    .explain{margin-top:14px;border-left:4px solid var(--secondary);background:var(--surface);padding:12px 14px;border-radius:8px}
+    .navline{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+    .chart{display:flex;align-items:flex-end;gap:10px;height:160px;padding:10px;border-radius:10px;border:1px solid rgba(0,0,0,.08)}
+    .barCol{flex:1;position:relative;background:linear-gradient(180deg,var(--primary),var(--secondary));border-radius:8px;min-width:40px}
+    .barVal{position:absolute;top:-22px;left:0;right:0;text-align:center;font-weight:800;font-size:12px}
+    .barLbl{position:absolute;bottom:-22px;left:0;right:0;text-align:center;font-size:12px;color:var(--muted)}
+    .service-grid{display:grid;grid-template-columns:280px 1fr;gap:18px} .rank{text-align:center} .rank .badge{font-size:46px} .rank .name{font-weight:800;margin-top:6px}
+    .xpTrack{width:100%;height:14px;border-radius:999px;background:rgba(0,0,0,.08);overflow:hidden} .xpBar{height:100%;width:0%;background:linear-gradient(90deg,var(--secondary),var(--primary))}
+    .achGrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px} .ach{padding:12px;border-radius:10px;border:1px dashed rgba(0,0,0,.12);opacity:.55} .ach.unlocked{border-style:solid;opacity:1;background:linear-gradient(180deg,#fff,#fafafa)}
+    .small{font-size:13px;color:var(--muted)} .hidden{display:none!important} .right{margin-left:auto}
+    .toast{position:fixed;left:50%;bottom:18px;transform:translateX(-50%);background:var(--toast-bg);color:var(--toast-fg);padding:10px 14px;border-radius:10px;box-shadow:var(--shadow);z-index:1000}
+    .backdrop{position:fixed;inset:0;background:var(--backdrop);display:flex;align-items:center;justify-content:center;z-index:999}
+    .modal{width:min(760px,92vw)} .modal textarea{width:100%;min-height:180px;border-radius:10px;border:1px solid rgba(0,0,0,.12);padding:10px;font-family:ui-monospace,Consolas,monospace}
+    .pill{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 10px;border-radius:999px;background:#fff;border:1px solid rgba(0,0,0,.08)}
+  </style>
+</head>
+<body class="theme-space">
+  <div class="container">
+    <header class="card" aria-labelledby="app-title">
+      <h1 id="app-title">CISA STUDY COMMAND CENTER</h1>
+      <div class="grid stats" style="margin-top:12px">
+        <div class="card stat"><div class="num" id="totalQuestions">0</div><div class="lbl">Queries Processed</div></div>
+        <div class="card stat"><div class="num" id="correctAnswers">0</div><div class="lbl">Successful Ops</div></div>
+        <div class="card stat"><div class="num" id="accuracy">0%</div><div class="lbl">System Efficiency</div></div>
+      </div>
+    </header>
+
+    <main id="mainMenu" class="card" role="region" aria-label="Mission Parameters" style="margin-top:12px">
+      <h2>// Mission Parameters</h2>
+      <div class="row" style="margin-top:10px">
+        <div class="controls" style="gap:10px">
+          <select id="quizType" class="select" aria-label="Quiz Type">
+            <option value="mixed-25">Standard Protocol (25 Mixed)</option>
+            <option value="mixed-50">Extended Protocol (50 Mixed)</option>
+            <option value="domain1">Domain 1: Auditing Process (20)</option>
+            <option value="domain2">Domain 2: Governance & IT Mgmt (20)</option>
+            <option value="domain3">Domain 3: IS Acquisition & Dev (15)</option>
+            <option value="domain4">Domain 4: IS Ops & Resilience (25)</option>
+            <option value="domain5">Domain 5: Info Asset Protection (25)</option>
+          </select>
+          <label class="pill"><input id="noRepeat" type="checkbox" checked style="accent-color:var(--primary)"> No repeats until pool exhausted</label>
+          <select id="themeSelect" class="select" aria-label="Theme">
+            <option value="space">Space Light</option>
+            <option value="celestial">Celestial Pastel</option>
+            <option value="dark">Dark Mode</option>
+          </select>
+          <select id="providerSelect" class="select" aria-label="AI Provider">
+            <option value="none">AI Provider: None (copy only)</option>
+            <option value="chatgpt">ChatGPT</option>
+            <option value="gemini">Google Gemini</option>
+            <option value="claude">Claude</option>
+            <option value="perplexity">Perplexity</option>
+            <option value="copilot">Microsoft Copilot</option>
+          </select>
+          <button class="btn primary" onclick="generateQuiz()">Initialize Mission</button>
+          <button class="btn" onclick="showServiceRecord()">// Service Record</button>
+          <button class="btn" onclick="showHelp()">Help</button>
+          <button class="btn danger" onclick="resetStats()">System Reset</button>
+        </div>
+      </div>
+      <hr style="margin:14px 0;border:none;border-top:1px solid rgba(0,0,0,.06)">
+      <div class="row small">
+        <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+          <span class="pill" title="Current question pack"><strong id="packName">Pack:</strong>&nbsp;<span id="packMeta">Built-in Sample</span></span>
+          <span class="pill" title="Unique items after dedupe"><strong>Unique Qs:</strong>&nbsp;<span id="packCount">0</span></span>
+          <span class="pill" title="Duplicates skipped on import"><strong>Duplicates Removed:</strong>&nbsp;<span id="packDup">0</span></span>
+          <span class="pill" title="Version"><strong>Ver:</strong>&nbsp;<span id="packVer">1.0</span></span>
+        </div>
+        <div class="controls right">
+          <input id="packFile" type="file" accept="application/json" class="select" style="height:36px" />
+          <button class="btn" onclick="importPackFile()">Import Pack</button>
+          <button class="btn" onclick="exportPackTemplate()">Download Template</button>
+          <button class="btn" onclick="resetPools()">Refresh Pools</button>
+          <button class="btn" onclick="runDiagnostics()">Run Diagnostics</button>
+        </div>
+      </div>
+    </main>
+
+    <section id="quizPanel" class="card hidden" role="region" aria-label="Active Mission">
+      <div class="row small" style="margin-bottom:8px">
+        <div id="progressText">Ready</div>
+        <div class="right">
+          <button id="askBtn" class="btn secondary" onclick="askAI()">Ask AI</button>
+          <button id="exitBtn" class="btn ghost" onclick="exitMission()">Exit Mission</button>
+        </div>
+      </div>
+      <div class="progress-wrap"><div class="progress"><div id="progressBar" class="bar"></div></div></div>
+      <h3 id="questionText" style="margin:6px 0 2px">—</h3>
+      <div id="answers" class="answers" role="group" aria-labelledby="questionText"></div>
+      <div id="explain" class="explain hidden" aria-live="polite"></div>
+      <div class="navline">
+        <button id="prevBtn" class="btn ghost" onclick="prevQuestion()">⏪ Previous</button>
+        <button id="skipBtn" class="btn ghost" onclick="skipQuestion()">Skip ⏩</button>
+        <button id="resetBtn" class="btn danger hidden" onclick="resetQuery()">🔄 Reset Query</button>
+        <button id="nextBtn" class="btn primary hidden" onclick="nextQuestion()">Next ➡️</button>
+        <button id="finishBtn" class="btn secondary hidden" onclick="finishQuiz()">Finish Mission</button>
+      </div>
+    </section>
+
+    <section id="resultsPanel" class="card hidden" role="region" aria-label="Mission Debrief">
+      <h2 style="margin-top:0">Mission Debrief</h2>
+      <div id="finalResults" style="margin:8px 0 12px"></div>
+      <div id="chart" class="chart" aria-label="Domain Accuracy"></div>
+      <div id="brief" class="card" style="margin-top:12px;border-left:6px solid var(--secondary)"></div>
+      <div class="navline" style="margin-top:14px">
+        <button class="btn ghost" onclick="startOver()">New Mission</button>
+        <button class="btn primary" onclick="generateWeakAreaQuiz()">🎯 Target Weak Areas</button>
+      </div>
+    </section>
+
+    <section id="servicePanel" class="card hidden" role="region" aria-label="Service Record">
+      <h2>// Service Record</h2>
+      <div class="service-grid">
+        <div class="card">
+          <div class="rank"><div id="rankBadge" class="badge" aria-hidden="true">🎖️</div><div id="rankName" class="name">Cadet</div></div>
+          <div style="margin-top:10px"><div class="small" id="xpText">XP: 0 / 100</div><div class="xpTrack" aria-hidden="true"><div id="xpBar" class="xpBar"></div></div></div>
+        </div>
+        <div class="card">
+          <h3 style="margin-top:0">// Commendations</h3>
+          <div id="achGrid" class="achGrid"></div>
+        </div>
+      </div>
+      <div class="navline" style="margin-top:12px"><button class="btn ghost" onclick="showMainMenu()">Return to Command</button></div>
+    </section>
+  </div>
+
+  <!-- MODALS -->
+  <div id="toast" class="toast hidden" role="status" aria-live="polite"></div>
+  <div id="modalBackdrop" class="backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="copyTitle">
+    <div class="modal card">
+      <h3 id="copyTitle">Copy prompt to use in your chosen AI</h3>
+      <p class="small">Clipboard access may be blocked. If copying fails, select all and copy manually.</p>
+      <textarea id="copyTextarea" aria-label="Prompt to copy"></textarea>
+      <div class="navline" style="margin-top:10px">
+        <button class="btn" onclick="selectModalText()">Select All</button>
+        <button class="btn" onclick="attemptCopyFromModal()">Copy Again</button>
+        <button class="btn secondary right" onclick="openProvider()">Open Provider</button>
+        <button class="btn ghost" onclick="hideCopyModal()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="helpBackdrop" class="backdrop hidden" role="dialog" aria-modal="true" aria-labelledby="helpTitle">
+    <div class="modal card">
+      <h3 id="helpTitle">Quickstart Instructions</h3>
+      <ol class="small" style="margin-top:8px">
+        <li><strong>Open the app:</strong> Save as <code>index.html</code> and open in Chrome/Edge/Firefox.</li>
+        <li><strong>Load questions:</strong> Click <em>Download Template</em>, fill it with your 600+ Qs, then <em>Import Pack</em>. (Stays local in this browser.)</li>
+        <li><strong>Pick a mission:</strong> Choose quiz type → <em>Initialize Mission</em>.</li>
+        <li><strong>Answer flow:</strong> Select an answer → explanation appears. Use <em>Next</em>, <em>Previous</em>, <em>Skip</em>, or <em>🔄 Reset Query</em>.</li>
+        <li><strong>Avoid repeats:</strong> Keep <em>No repeats</em> checked. Use <em>Refresh Pools</em> to reshuffle between sessions.</li>
+        <li><strong>Exit anytime:</strong> <em>Exit Mission</em> returns to main menu; lifetime stats persist.</li>
+        <li><strong>Weak areas:</strong> After a mission, click 🎯 to drill missed concepts.</li>
+        <li><strong>Ask AI (optional):</strong> Choose a provider or leave <em>None</em>. We copy a clean prompt—no subscription required.</li>
+      </ol>
+      <div class="navline" style="margin-top:10px">
+        <button class="btn secondary right" onclick="hideHelp()">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ======= KEYS & REMOTE CONFIG =======
+    const LS_STATS='cisa_cc_stats_v2';
+    const LS_PACK='cisa_cc_pack_v1';
+    const LS_POOLS='cisa_cc_pools_v1';
+    const REMOTE_PACK_URL='packs/cisa-pack-core-latest.json'; // or pin a version
+
+    // ======= STATE =======
+    let userStats={ totalQuestions:0, correctAnswers:0, weakAreas:{}, xp:0, rank:'Cadet', achievements:new Set(), theme:'space' };
+    let config={ noRepeat:true };
+
+    // normalized bank and pack meta
+    let bank={domain1:[],domain2:[],domain3:[],domain4:[],domain5:[]};
+    let packInfo={ name:'Built-in Sample', version:'1.0', id:'builtin', unique:0, removed:0 };
+
+    // pools + memory (persisted)
+    let pools={ domain1:[], domain2:[], domain3:[], domain4:[], domain5:[] };
+    let poolIdx={ domain1:0, domain2:0, domain3:0, domain4:0, domain5:0 };
+    let usedLifetime={ domain1:new Set(), domain2:new Set(), domain3:new Set(), domain4:new Set(), domain5:new Set() };
+
+    // current mission
+    let currentQuiz=[]; let currentIndex=0; let responses=[]; let lastSelectedIndex=null;
+
+    // ======= DOM =======
+    const $=sel=>document.querySelector(sel);
+    const byId=id=>document.getElementById(id);
+
+    const mainMenu=byId('mainMenu'), quizPanel=byId('quizPanel'), resultsPanel=byId('resultsPanel'), servicePanel=byId('servicePanel');
+    const totalQuestionsEl=byId('totalQuestions'), correctAnswersEl=byId('correctAnswers'), accuracyEl=byId('accuracy');
+    const themeSelect=byId('themeSelect'), providerSelect=byId('providerSelect');
+    const progressBar=byId('progressBar'), progressText=byId('progressText'), questionText=byId('questionText');
+    const answersEl=byId('answers'), explainEl=byId('explain');
+    const prevBtn=byId('prevBtn'), skipBtn=byId('skipBtn'), resetBtn=byId('resetBtn'), nextBtn=byId('nextBtn'), finishBtn=byId('finishBtn');
+    const chart=byId('chart'), brief=byId('brief');
+    const rankBadge=byId('rankBadge'), rankName=byId('rankName'), xpText=byId('xpText'), xpBar=byId('xpBar'), achGrid=byId('achGrid');
+    const toast=byId('toast'), modalBackdrop=byId('modalBackdrop'), copyTextarea=byId('copyTextarea');
+    const helpBackdrop=byId('helpBackdrop');
+
+    // ======= UTILS =======
+    function shuffle(a){ for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]] } return a }
+    function normStem(s){ return (s||'').replace(/\s+/g,' ').trim().toLowerCase(); }
+    function hash32(str){ let h=0; for(let i=0;i<str.length;i++){ h=(h*31 + str.charCodeAt(i))|0; } return (h>>>0).toString(36); }
+
+    // ======= SAMPLE PACK (tiny demo) =======
+    const SAMPLE_PACK={
+      meta:{name:'Sample Pack',version:'1.0',id:'sample'},
+      items:[
+        {id:'d1-001', domain:'domain1', concept:'Audit Charter', difficulty:2, stem:'What is the PRIMARY purpose of an IS audit charter?', options:["Document procedures for an engagement.","Outline audit cost and timeline.","Grant authority, scope, and responsibilities.","List report distribution stakeholders."], answerIndex:2, explanation:'The charter formally establishes mandate, authority, independence, and scope for the audit function.'},
+        {id:'d1-002', domain:'domain1', concept:'Audit Evidence', difficulty:1, stem:'Which is the MOST reliable audit evidence?', options:["Inquiry of management","System-generated report","Direct observation by the auditor","Third-party confirmation"], answerIndex:3, explanation:'Evidence obtained from an independent third party carries the highest reliability.'},
+        {id:'d2-001', domain:'domain2', concept:'IT Governance', difficulty:1, stem:'A primary goal of IT governance is to:', options:["Have the latest technology.","Align IT with business strategy.","Minimize all IT spend.","Run the help desk."], answerIndex:1, explanation:'IT governance ensures IT enables and supports business objectives.'},
+        {id:'d3-001', domain:'domain3', concept:'SDLC Phases', difficulty:1, stem:'During which SDLC phase are user requirements formally defined?', options:["Design","Development","Testing","Requirements Gathering"], answerIndex:3, explanation:'Analysis/requirements phase captures, validates, and documents stakeholder needs.'},
+        {id:'d4-001', domain:'domain4', concept:'Business Impact Analysis', difficulty:1, stem:'A business impact analysis (BIA) is performed to:', options:["Calculate disaster costs","Identify critical processes & RTOs","Pick an alternate site vendor","Test the DRP"], answerIndex:1, explanation:'BIA identifies critical processes, dependencies, and recovery objectives.'},
+        {id:'d5-001', domain:'domain5', concept:'Authentication Methods', difficulty:1, stem:'Which provides the STRONGEST authentication?', options:["Complex password","Biometric scan","Password + OTP","Security question"], answerIndex:2, explanation:'Combining different factors (knowledge + possession) is MFA and strongest.'}
+      ]
+    };
+
+    // ======= PACK NORMALIZATION =======
+    function labelFor(d){ return ({domain1:'Domain 1',domain2:'Domain 2',domain3:'Domain 3',domain4:'Domain 4',domain5:'Domain 5'})[d]; }
+
+    function packToBank(raw){
+      const seen = new Map(); // stemHash -> id
+      const out = {domain1:[],domain2:[],domain3:[],domain4:[],domain5:[]};
+      let removed=0, kept=0;
+      (raw.items||[]).forEach(item=>{
+        if(!item || !item.stem || !Array.isArray(item.options)) return;
+        const stemKey = hash32(normStem(item.stem));
+        if(seen.has(stemKey)) { removed++; return; }
+        seen.set(stemKey, item.id || stemKey);
+        const dom = item.domain; if(!out[dom]) { removed++; return; }
+        out[dom].push({
+          id: item.id || stemKey,
+          question: item.stem,
+          answers: item.options.slice(0,4),
+          correct: Math.min(Math.max(0, item.answerIndex|0), 3),
+          explanation: item.explanation || '',
+          concept: item.concept || 'General',
+          domainLabel: labelFor(dom)
+        });
+        kept++;
+      });
+      return {bank: out, stats:{unique:kept, removed} };
+    }
+
+    // ======= BADGES =======
+    function updatePackBadges(){
+      byId('packName').textContent='Pack:';
+      byId('packMeta').textContent=packInfo.name;
+      byId('packCount').textContent=packInfo.unique;
+      byId('packDup').textContent=packInfo.removed;
+      byId('packVer').textContent=packInfo.version;
+    }
+
+    // ======= POOLS & MEMORY =======
+    function persistPools(){
+      const obj = {
+        pools,
+        poolIdx,
+        usedLifetime: Object.fromEntries(Object.entries(usedLifetime).map(([d,s])=>[d,[...s]])),
+        packId: packInfo.id
+      };
+      localStorage.setItem(LS_POOLS, JSON.stringify(obj));
+    }
+    function loadUsedLifetime(){
+      try{
+        const raw = localStorage.getItem(LS_POOLS);
+        if(!raw) return false;
+        const obj = JSON.parse(raw);
+        const used = obj.usedLifetime || obj.used;
+        if(!used) return false;
+        usedLifetime = Object.fromEntries(Object.entries(used).map(([d,arr])=>[d,new Set(arr)]));
+        return true;
+      }catch{ return false; }
+    }
+
+    function rebuildPools(resetUsed=true){
+      if(resetUsed){
+        usedLifetime={ domain1:new Set(), domain2:new Set(), domain3:new Set(), domain4:new Set(), domain5:new Set() };
+      }
+      for(const d of Object.keys(bank)){
+        const seen = usedLifetime[d] || new Set();
+        const ids = bank[d].map(q=>q.id);
+        const filtered = config.noRepeat ? ids.filter(id=>!seen.has(id)) : ids.slice();
+        pools[d] = shuffle(filtered);
+        poolIdx[d] = 0;
+      }
+      persistPools();
+    }
+
+    function drawFromPool(domain, n, sessionSet){
+      const allowRepeat = !config.noRepeat;
+      const used = usedLifetime[domain];
+      const picked=[];
+      let guard=0;
+
+      while(picked.length<n && guard<10000){
+        guard++;
+        if(poolIdx[domain] >= pools[domain].length){
+          const base = bank[domain].map(q=>q.id);
+          let refill = base.filter(id=> allowRepeat || !used.has(id));
+          if(refill.length===0){
+            if(config.noRepeat) break; else refill = base.slice();
+          }
+          pools[domain] = shuffle(refill);
+          poolIdx[domain] = 0;
+        }
+        const id = pools[domain][poolIdx[domain]++];
+        if(sessionSet.has(id)) continue;
+        if(!allowRepeat && used.has(id)) continue;
+        picked.push(id);
+        if(config.noRepeat) used.add(id);
+      }
+      return picked;
+    }
+
+    // ======= LOAD/SAVE PACK =======
+    function loadPack(raw){
+      const {bank:bk, stats} = packToBank(raw);
+      bank=bk;
+      packInfo={
+        name: raw.meta?.name || 'Question Pack',
+        version: raw.meta?.version || '1.0',
+        id: raw.meta?.id || 'local',
+        unique: stats.unique,
+        removed: stats.removed
+      };
+      updatePackBadges();
+      rebuildPools(true);
+      localStorage.setItem(LS_PACK, JSON.stringify(raw));
+    }
+
+    function resetPools(){
+      rebuildPools(true);
+      Object.keys(usedLifetime).forEach(d=>usedLifetime[d].clear());
+      persistPools();
+      showToast('Pools refreshed. No-repeat memory cleared.');
+    }
+
+    async function importPackFile(){
+      const f=byId('packFile').files[0]; if(!f) return alert('Choose a JSON file first.');
+      const txt = await f.text(); let json=null;
+      try{ json=JSON.parse(txt); }catch(e){ alert('Invalid JSON.'); return; }
+      loadPack(json); showToast('Pack imported.');
+    }
+
+    function exportPackTemplate(){
+      const template={
+        meta:{ name:'Your Pack Name', version:'1.0', id:'your-pack-id' },
+        items:[
+          { id:'d1-001', domain:'domain1', concept:'Topic', difficulty:2, stem:'Question text here...', options:['A','B','C','D'], answerIndex:0, explanation:'Short rationale with references if possible.' }
+        ]
+      };
+      const blob = new Blob([JSON.stringify(template,null,2)],{type:'application/json'});
+      const a=document.createElement('a'); a.href=URL.createObjectURL(blob); a.download='cisa-question-pack-template.json'; a.click(); URL.revokeObjectURL(a.href);
+    }
+
+    // ======= REMOTE PACK LOADER (GitHub Pages) =======
+    async function loadRemotePack(url=REMOTE_PACK_URL){
+      try{
+        const res = await fetch(url, { cache:'no-store', mode:'cors' });
+        if(!res.ok) throw new Error('HTTP '+res.status);
+        const pack = await res.json();
+
+        const tmp = {domain1:[],domain2:[],domain3:[],domain4:[],domain5:[]};
+        const seen = new Set(); let added=0, dropped=0;
+
+        for (const item of (pack.items||[])) {
+          if (!tmp[item.domain]) continue;
+          const key = normStem(item.stem);
+          if (seen.has(key)) { dropped++; continue; }
+          seen.add(key);
+          tmp[item.domain].push({
+            id: item.id || hash32(key),
+            question: item.stem,
+            answers: item.options,
+            correct: item.answerIndex,
+            explanation: item.explanation,
+            concept: item.concept,
+            domainLabel: labelFor(item.domain)
+          });
+          added++;
+        }
+
+        bank = tmp;
+        packInfo = {
+          name: pack.meta?.name || 'Server Pack',
+          version: pack.meta?.version || '1.0',
+          id: pack.meta?.id || 'remote',
+          unique: added,
+          removed: dropped
+        };
+
+        localStorage.setItem(LS_PACK, JSON.stringify(pack));
+        rebuildPools(true);
+        updatePackBadges();
+        showToast(`Loaded ${added} unique Qs from server${dropped?` (dropped ${dropped} dupes)`:''}.`);
+      } catch (err) {
+        console.error('Remote pack load failed:', err);
+        showToast('Online pack unavailable — using cached/built-in pack.');
+        throw err; // rethrow so boot fallback runs
+      }
+    }
+
+    function restorePack(){
+      try{
+        const raw = localStorage.getItem(LS_PACK);
+        if(!raw){ loadPack(SAMPLE_PACK); return false; }
+        const pack = JSON.parse(raw);
+        loadPack(pack);
+        showToast('Loaded cached question pack (offline).');
+        return true;
+      }catch(e){
+        console.error('restorePack failed', e);
+        loadPack(SAMPLE_PACK);
+        return false;
+      }
+    }
+
+    function bankLoaded(){ return Object.values(bank).some(a=>a.length>0); }
+
+    // ======= QUIZ GENERATION =======
+    function generateQuiz(){
+      const mode = byId('quizType').value;
+      config.noRepeat = byId('noRepeat').checked;
+
+      if(!bankLoaded()){ loadPack(SAMPLE_PACK); }
+
+      const sessionSet=new Set();
+      let qIds=[];
+
+      if(mode.startsWith('mixed')){
+        const total = parseInt(mode.split('-')[1],10);
+        const weights={domain1:0.21,domain2:0.17,domain3:0.12,domain4:0.23,domain5:0.27};
+        const allocations = Object.entries(weights).map(([k,w])=>({k, want: total*w}));
+        const base = allocations.map(o=>({k:o.k, n:Math.floor(o.want), frac:o.want-Math.floor(o.want)}));
+        let used = base.reduce((s,o)=>s+o.n,0);
+        base.sort((a,b)=>b.frac-a.frac);
+        for(let i=0; used<total && i<base.length; i++){ base[i].n++; used++; }
+
+        let deficit=0; const drawnByDom={};
+        base.forEach(o=>{
+          const drawn = drawFromPool(o.k, o.n, sessionSet);
+          drawn.forEach(id=>sessionSet.add(id));
+          drawnByDom[o.k]=(drawnByDom[o.k]||[]).concat(drawn);
+          if(drawn.length<o.n) deficit += (o.n - drawn.length);
+        });
+        if(deficit>0){
+          for(const d of ['domain1','domain2','domain3','domain4','domain5']){
+            if(deficit<=0) break;
+            const extra = drawFromPool(d, deficit, sessionSet);
+            extra.forEach(id=>{ sessionSet.add(id); (drawnByDom[d]||(drawnByDom[d]=[])).push(id); deficit--; });
+          }
+        }
+        qIds = Object.values(drawnByDom).flat();
+      } else {
+        const perDom={domain1:20,domain2:20,domain3:15,domain4:25,domain5:25};
+        const dKey=mode; const need=perDom[dKey];
+        const drawn=drawFromPool(dKey, need, sessionSet);
+        if(drawn.length<need) showToast(`Only ${drawn.length} unique questions available for this domain with current no-repeat setting.`);
+        qIds = drawn;
+      }
+
+      const lookup = Object.fromEntries(['domain1','domain2','domain3','domain4','domain5'].flatMap(d=>bank[d].map(q=>[q.id,{...q,domain:d}])));
+      currentQuiz = qIds.map(id=>lookup[id]).filter(Boolean);
+
+      currentIndex=0; responses=[]; lastSelectedIndex=null;
+      if(currentQuiz.length===0){ alert('No questions available. Import a pack or disable No Repeats and try again.'); return; }
+      showPanel('quiz'); renderQuestion(); persistPools();
+    }
+
+    // Weak-area drill
+    function generateWeakAreaQuiz(){
+      const weak = Object.entries(userStats.weakAreas).sort((a,b)=>b[1]-a[1]).map(([k])=>k);
+      if(!weak.length){ showToast('No weak areas yet. Complete a mission first.'); return; }
+      const pool=[];
+      ['domain1','domain2','domain3','domain4','domain5'].forEach(d=>{
+        bank[d].forEach(q=>{ if(weak.includes(q.concept)) pool.push(q); });
+      });
+      if(!pool.length){ showToast('Current pack has no items matching weak concepts.'); return; }
+      shuffle(pool);
+      currentQuiz = pool.slice(0, Math.min(12, pool.length));
+      currentIndex=0; responses=[]; lastSelectedIndex=null;
+      showPanel('quiz'); renderQuestion();
+    }
+
+    // ======= RENDER & FLOW =======
+    function renderQuestion(){
+      if(currentIndex>=currentQuiz.length) return finishQuiz();
+      const q=currentQuiz[currentIndex]; lastSelectedIndex=null;
+      questionText.textContent=q.question; answersEl.innerHTML='';
+      q.answers.forEach((t,i)=>{
+        const b=document.createElement('button');
+        b.className='answer'; b.type='button';
+        b.textContent=`${['A','B','C','D'][i]}. ${t}`;
+        b.onclick=()=>selectAnswer(i);
+        answersEl.appendChild(b);
+      });
+      explainEl.classList.add('hidden'); resetBtn.classList.add('hidden'); nextBtn.classList.add('hidden'); finishBtn.classList.add('hidden');
+      prevBtn.classList.toggle('hidden', currentIndex===0); skipBtn.classList.remove('hidden'); updateProgress();
+    }
+
+    function selectAnswer(i){
+      const q=currentQuiz[currentIndex]; if(responses.find(r=>r.questionId===q.id)) return;
+      lastSelectedIndex=i; const isCorrect=(i===q.correct);
+      responses.push({questionId:q.id, questionIndex:currentIndex, isCorrect, selectedIndex:i, domainLabel:q.domainLabel, concept:q.concept, q});
+      userStats.totalQuestions++; if(isCorrect) userStats.correctAnswers++; else { userStats.weakAreas[q.concept]=(userStats.weakAreas[q.concept]||0)+1; }
+      [...answersEl.children].forEach((btn,idx)=>{ btn.setAttribute('aria-disabled','true'); if(idx===q.correct) btn.classList.add('correct'); else if(idx===i) btn.classList.add('incorrect'); });
+      explainEl.innerHTML=`<h4>Why</h4><div>${q.explanation||''}</div>`; explainEl.classList.remove('hidden');
+      prevBtn.classList.add('hidden'); skipBtn.classList.add('hidden'); resetBtn.classList.remove('hidden');
+      (currentIndex<currentQuiz.length-1?nextBtn:finishBtn).classList.remove('hidden');
+      updateStatsUI(); saveStats(); persistPools();
+    }
+
+    function prevQuestion(){ if(currentIndex>0){ currentIndex--; renderQuestion(); } }
+    function nextQuestion(){ currentIndex++; renderQuestion(); }
+    function skipQuestion(){ if(currentIndex<currentQuiz.length-1){ currentIndex++; renderQuestion(); } else { finishQuiz(); } }
+
+    function resetQuery(){
+      const q=currentQuiz[currentIndex]; const idx=responses.findIndex(r=>r.questionId===q.id);
+      if(idx===-1) return; const a=responses[idx]; responses.splice(idx,1);
+      userStats.totalQuestions--; if(a.isCorrect) userStats.correctAnswers--; else { const c=a.concept; if(userStats.weakAreas[c]){ userStats.weakAreas[c]--; if(userStats.weakAreas[c]<=0) delete userStats.weakAreas[c]; } }
+      updateStatsUI(); saveStats(); renderQuestion();
+    }
+
+    function updateProgress(){ const pct=((currentIndex+1)/currentQuiz.length)*100; progressBar.style.width=pct.toFixed(2)+'%'; progressText.textContent=`Query ${currentIndex+1} of ${currentQuiz.length}`; }
+    function exitMission(){ if(confirm('Exit this mission? Progress within this mission will be lost, lifetime stats kept.')) showPanel('menu'); }
+    function startOver(){ showPanel('menu'); }
+
+    // ======= ASK AI (no subscription required) =======
+    function buildPromptForAI(){
+      const q=currentQuiz[currentIndex];
+      const answered=responses.find(r=>r.questionId===q.id);
+      const lines=['You are helping me study for the CISA exam.',`Question: ${q.question}`,'Options:',...q.answers.map((t,i)=>`${['A','B','C','D'][i]}. ${t}`)];
+      if(answered){
+        lines.push(`My Answer: ${['A','B','C','D'][answered.selectedIndex]}`);
+        lines.push(`Correct Answer: ${['A','B','C','D'][q.correct]}`);
+        lines.push(`Provided Explanation: ${q.explanation||''}`);
+        lines.push('Explain differently with a practical example. Briefly state why each other option is not best.');
+      } else {
+        lines.push('Explain the BEST answer and why each other option is not best.');
+      }
+      return lines.join('\n');
+    }
+    async function copyToClipboard(text){
+      try{ if(navigator.clipboard && window.isSecureContext){ await navigator.clipboard.writeText(text); return true; } }catch(e){}
+      try{ const ta=document.createElement('textarea'); ta.value=text; ta.setAttribute('readonly',''); ta.style.position='absolute'; ta.style.left='-9999px'; document.body.appendChild(ta); ta.select(); const ok=document.execCommand('copy'); document.body.removeChild(ta); return !!ok; }catch(e){ return false }
+    }
+    function showToast(msg){ const el=toast; el.textContent=msg; el.classList.remove('hidden'); clearTimeout(showToast._t); showToast._t=setTimeout(()=>el.classList.add('hidden'),2000); }
+    function showCopyModal(prompt){ copyTextarea.value=prompt; modalBackdrop.classList.remove('hidden'); copyTextarea.focus(); copyTextarea.select(); }
+    function hideCopyModal(){ modalBackdrop.classList.add('hidden'); }
+    function selectModalText(){ copyTextarea.focus(); copyTextarea.select(); }
+    async function attemptCopyFromModal(){ const ok=await copyToClipboard(copyTextarea.value); showToast(ok?'Copied to clipboard!':'Copy failed. Use Ctrl/Cmd+C.'); }
+    function providerUrl(){ const map={ none:'', chatgpt:'https://chat.openai.com/', gemini:'https://gemini.google.com/app', claude:'https://claude.ai/', perplexity:'https://www.perplexity.ai/', copilot:'https://copilot.microsoft.com/' }; return map[providerSelect.value]||''; }
+    function openProvider(){ const url=providerUrl(); if(!url){ showToast('Select an AI Provider (or keep None to just copy).'); return false; } window.open(url,'_blank','noopener'); return true; }
+    async function askAI(){ const prompt=buildPromptForAI(); const copied=await copyToClipboard(prompt); if(copied) showToast('Prompt copied. Opening provider…'); else showCopyModal(prompt); openProvider(); }
+
+    // ======= RESULTS / GAMIFICATION =======
+    const RANKS=[{name:'Cadet',xp:0,badge:'🎖️'},{name:'Ensign',xp:100,badge:'⭐'},{name:'Lieutenant',xp:300,badge:'⭐⭐'},{name:'Commander',xp:700,badge:'🚀'},{name:'Captain',xp:1500,badge:'🌟'},{name:'Admiral',xp:3000,badge:'🏆'}];
+    const ACH={ first_mission:{name:'First Mission',desc:'Complete your first quiz.'}, quick_learner:{name:'Quick Learner',desc:'Get your first 10 questions correct.'}, persistent_analyst:{name:'Persistent Analyst',desc:'Answer 100 total questions.'}, perfectionist:{name:'Perfectionist',desc:'Score 100% on any quiz of 15+ questions.'} };
+
+    function finishQuiz(){
+      showPanel('results');
+      const correct=responses.filter(r=>r.isCorrect).length; const total=currentQuiz.length; const acc=total?Math.round((correct/total)*100):0;
+      addXP(correct*10); checkAchievements(acc);
+      byId('finalResults').innerHTML=`<div class="card" style="border-left:6px solid var(--primary)"><strong>Score:</strong> ${correct} / ${total} (${acc}%) · <span class="small">+${correct*10} XP</span></div>`;
+      chart.innerHTML='';
+      const perf={}; responses.forEach(r=>{ const d=r.domainLabel||'Mixed'; perf[d]=perf[d]||{c:0,t:0}; perf[d].t++; if(r.isCorrect) perf[d].c++; });
+      Object.keys(perf).forEach(d=>{ const v=Math.round((perf[d].c/perf[d].t)*100); const col=document.createElement('div'); col.className='barCol'; col.style.height=v+'%'; col.innerHTML=`<div class="barVal">${v}%</div><div class="barLbl">${d.replace('Domain ','D')}</div>`; chart.appendChild(col); });
+      const miss=responses.filter(r=>!r.isCorrect);
+      if(miss.length===0){ brief.innerHTML=`<strong>// Tactical Briefing:</strong> Flawless execution. All systems nominal.`; }
+      else { const tally={}; miss.forEach(m=>{ tally[m.concept]=(tally[m.concept]||0)+1; }); const worst=Object.keys(tally).sort((a,b)=>tally[b]-tally[a])[0]; brief.innerHTML=`<strong>// Tactical Briefing:</strong> Focus drills on <em>${worst}</em>. Consider a 🎯 Weak Area mission next.`; }
+      responses=[]; saveStats(); persistPools();
+    }
+    function addXP(n){ userStats.xp+=n; checkRank(); saveStats(); }
+    function checkRank(){ const current=[...RANKS].reverse().find(r=>userStats.xp>=r.xp)||RANKS[0]; userStats.rank=current.name; rankBadge.textContent=current.badge; rankName.textContent=current.name; const next=RANKS[RANKS.indexOf(current)+1]; if(next){ const need=next.xp-current.xp; const have=userStats.xp-current.xp; xpText.textContent=`XP: ${userStats.xp} / ${next.xp}`; xpBar.style.width=Math.min(100,(have/need)*100)+'%'; } else { xpText.textContent=`XP: ${userStats.xp} (Max Rank)`; xpBar.style.width='100%'; } }
+    function checkAchievements(acc){ const newly=[]; if(!userStats.achievements.has('first_mission')) newly.push('first_mission'); if(userStats.correctAnswers>=10 && !userStats.achievements.has('quick_learner')) newly.push('quick_learner'); if(userStats.totalQuestions>=100 && !userStats.achievements.has('persistent_analyst')) newly.push('persistent_analyst'); if(acc===100 && currentQuiz.length>=15 && !userStats.achievements.has('perfectionist')) newly.push('perfectionist'); newly.forEach(id=>{ userStats.achievements.add(id); showToast(`🏆 ${ACH[id].name||id}`); }); saveStats(); }
+    function renderService(){ checkRank(); achGrid.innerHTML=''; for(const id in ACH){ const a=ACH[id]; const div=document.createElement('div'); div.className='ach'; if(userStats.achievements.has(id)) div.classList.add('unlocked'); div.innerHTML=`<strong>${a.name}</strong><div class="small">${a.desc}</div>`; achGrid.appendChild(div); } }
+
+    // ======= PANELS =======
+    function showPanel(which){
+      mainMenu.classList.toggle('hidden', which!=='menu');
+      quizPanel.classList.toggle('hidden', which!=='quiz');
+      resultsPanel.classList.toggle('hidden', which!=='results');
+      servicePanel.classList.toggle('hidden', which!=='service');
+      if(which==='menu'){ responses=[]; }
+      if(which==='service') renderService();
+      updateStatsUI();
+    }
+    function showServiceRecord(){ showPanel('service'); }
+    function showMainMenu(){ showPanel('menu'); }
+
+    // ======= STATS PERSISTENCE =======
+    function saveStats(){ const safe={...userStats, achievements:[...userStats.achievements], theme: themeSelect.value }; localStorage.setItem(LS_STATS, JSON.stringify(safe)); }
+    function loadStats(){
+      try{ const raw=localStorage.getItem(LS_STATS); if(raw){ const o=JSON.parse(raw); userStats={ ...userStats, ...o, achievements:new Set(o.achievements||[]) }; } }catch(e){}
+      themeSelect.value=userStats.theme||'space'; applyTheme(themeSelect.value); updateStatsUI();
+    }
+    function updateStatsUI(){ totalQuestionsEl.textContent=userStats.totalQuestions; correctAnswersEl.textContent=userStats.correctAnswers; const acc=userStats.totalQuestions?Math.round((userStats.correctAnswers/userStats.totalQuestions)*100):0; accuracyEl.textContent=acc+"%"; }
+    function resetStats(){ if(!confirm('Reset lifetime stats, rank, and achievements?')) return; userStats={ totalQuestions:0, correctAnswers:0, weakAreas:{}, xp:0, rank:'Cadet', achievements:new Set(), theme: themeSelect.value }; saveStats(); updateStatsUI(); alert('System stats reset.'); }
+
+    // ======= THEME =======
+    function applyTheme(name){
+      document.body.classList.remove('theme-space','theme-celestial','theme-dark');
+      if(name==='celestial') document.body.classList.add('theme-celestial');
+      else if(name==='dark') document.body.classList.add('theme-dark');
+      else document.body.classList.add('theme-space');
+      userStats.theme=name; saveStats();
+    }
+    themeSelect.addEventListener('change',e=>applyTheme(e.target.value));
+
+    // ======= HELP =======
+    function showHelp(){ helpBackdrop.classList.remove('hidden'); }
+    function hideHelp(){ helpBackdrop.classList.add('hidden'); }
+
+    // ======= KEYS =======
+    window.addEventListener('keydown', (e)=>{ if(quizPanel.classList.contains('hidden')) return; if(e.key==='ArrowLeft') prevQuestion(); if(e.key==='ArrowRight') nextQuestion(); if(e.key.toLowerCase()==='s') skipQuestion(); if(e.key.toLowerCase()==='r') resetQuery(); if(e.key.toLowerCase()==='e') exitMission(); if(e.key.toLowerCase()==='a') askAI(); });
+    window.addEventListener('keydown', (e)=>{ if(e.key==='Escape'){ if(!modalBackdrop.classList.contains('hidden')) hideCopyModal(); if(!helpBackdrop.classList.contains('hidden')) hideHelp(); }});
+
+    // ======= DIAGNOSTICS =======
+    function runDiagnostics(){
+      const logs=[]; const ok=(b,m)=>logs.push(`${b?'✅':'❌'} ${m}`);
+      const dupPack = { meta:{name:'Test',version:'1.0',id:'t'}, items:[ ...SAMPLE_PACK.items, { id:'dup-x', domain:'domain2', concept:'Dup', difficulty:1, stem:SAMPLE_PACK.items[0].stem, options:['A','B','C','D'], answerIndex:0, explanation:'dup' } ] };
+      const {bank:tb, stats} = packToBank(dupPack);
+      ok(stats.removed===1,'Cross-domain duplicate removed');
+      ok(Object.values(tb).reduce((s,a)=>s+a.length,0)===SAMPLE_PACK.items.length,'Unique count equals original sample size');
+      bank = tb; rebuildPools(true); Object.keys(usedLifetime).forEach(d=>usedLifetime[d].clear()); config.noRepeat=true;
+      const s1=new Set(); drawFromPool('domain1',1,s1).forEach(id=>s1.add(id)); const s2=new Set(); drawFromPool('domain1',1,s2).forEach(id=>s2.add(id));
+      ok([...s1].every(id=>!s2.has(id)),'No-repeat draws are disjoint until exhausted');
+      loadPack(SAMPLE_PACK); config.noRepeat=true; const sessionSet=new Set(); const ids1=drawFromPool('domain1', Math.min(3, bank.domain1.length), sessionSet); const uniq=new Set(ids1); ok(ids1.length===uniq.size,'No duplicates within a single quiz selection');
+      alert(logs.join('\n'));
+    }
+
+    // ======= BOOT =======
+    document.addEventListener('DOMContentLoaded', async ()=>{
+      loadStats();
+      applyTheme(themeSelect.value);
+
+      const remoteOk = await loadRemotePack().then(()=>true).catch(()=>false);
+      if(!remoteOk) restorePack();
+
+      // hydrate lifetime memory, then rebuild queues WITHOUT clearing it
+      loadUsedLifetime();
+      rebuildPools(false);
+      updatePackBadges();
+
+      showPanel('menu');
+    });
+  </script>
+</body>
+</html>
