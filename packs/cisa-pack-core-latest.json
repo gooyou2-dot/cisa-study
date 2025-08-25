@@ -1,0 +1,234 @@
+{
+  "meta": { "name": "Core 600", "version": "1.0", "id": "core-600-v1" },
+  "items": [
+    {
+      "id": "d1-001",
+      "domain": "domain1",
+      "concept": "Audit Charter",
+      "difficulty": 2,
+      "stem": "What is the PRIMARY purpose of an IS audit charter?",
+      "options": [
+        "Document procedures for an engagement.",
+        "Outline audit cost and timeline.",
+        "Grant authority, scope, and responsibilities.",
+        "List report distribution stakeholders."
+      ],
+      "answerIndex": 2,
+      "explanation": "The charter establishes mandate, authority, independence, and scope for the audit function; procedures and timelines belong in the plan, not the charter."
+    },
+    {
+      "id": "d1-002",
+      "domain": "domain1",
+      "concept": "Audit Evidence",
+      "difficulty": 1,
+      "stem": "Which source is the MOST reliable audit evidence?",
+      "options": [
+        "Inquiry of management",
+        "System-generated report",
+        "Direct observation by the auditor",
+        "Third-party confirmation"
+      ],
+      "answerIndex": 3,
+      "explanation": "Independent third-party evidence is highest reliability. Observation is good but narrower; internal reports and inquiries are less reliable."
+    },
+    {
+      "id": "d1-003",
+      "domain": "domain1",
+      "concept": "Risk-Based Auditing",
+      "difficulty": 2,
+      "stem": "When using a risk-based audit approach, an IS auditor should FIRST:",
+      "options": [
+        "Evaluate existing controls.",
+        "Identify threats and vulnerabilities.",
+        "Understand business objectives and processes.",
+        "Perform compliance testing."
+      ],
+      "answerIndex": 2,
+      "explanation": "Business context comes first; it drives risk assessment and control evaluation. Threats/controls are assessed after understanding objectives."
+    },
+
+    {
+      "id": "d2-001",
+      "domain": "domain2",
+      "concept": "IT Governance",
+      "difficulty": 1,
+      "stem": "A primary goal of IT governance is to:",
+      "options": [
+        "Adopt the latest technology quickly.",
+        "Align IT strategy with business strategy.",
+        "Centralize the service desk.",
+        "Eliminate all IT risks."
+      ],
+      "answerIndex": 1,
+      "explanation": "Governance ensures IT enables business objectives. Tech adoption and org structures are operational; eliminating all risk is unrealistic."
+    },
+    {
+      "id": "d2-002",
+      "domain": "domain2",
+      "concept": "Steering Committee",
+      "difficulty": 2,
+      "stem": "The IT steering committee’s PRIMARY role is to:",
+      "options": [
+        "Approve and prioritize IT investments.",
+        "Monitor day-to-day IT operations.",
+        "Write security policies.",
+        "Run vulnerability scans."
+      ],
+      "answerIndex": 0,
+      "explanation": "The steering committee aligns portfolio choices with strategy and prioritizes investments. Ops and technical tasks sit elsewhere."
+    },
+    {
+      "id": "d2-003",
+      "domain": "domain2",
+      "concept": "Governance Roles",
+      "difficulty": 1,
+      "stem": "Who holds ultimate responsibility for IT governance?",
+      "options": [
+        "CIO",
+        "IT steering committee",
+        "Board of directors",
+        "CISO"
+      ],
+      "answerIndex": 2,
+      "explanation": "The board is ultimately accountable for enterprise governance, including IT. CIO/CISO execute; the steering committee advises."
+    },
+
+    {
+      "id": "d3-001",
+      "domain": "domain3",
+      "concept": "SDLC Phases",
+      "difficulty": 1,
+      "stem": "During which SDLC phase are user requirements formally defined?",
+      "options": [
+        "Design",
+        "Development",
+        "Testing",
+        "Requirements gathering"
+      ],
+      "answerIndex": 3,
+      "explanation": "Requirements (analysis) phase captures and validates business needs; design and build come after."
+    },
+    {
+      "id": "d3-002",
+      "domain": "domain3",
+      "concept": "Post-Implementation Review",
+      "difficulty": 1,
+      "stem": "The PRIMARY benefit of a post-implementation review (PIR) is to:",
+      "options": [
+        "Assign blame for delays.",
+        "Confirm business objectives were met.",
+        "Provide vendor payment sign-off.",
+        "Train end users."
+      ],
+      "answerIndex": 1,
+      "explanation": "PIR validates benefits realization and lessons learned. Blame, payment, and training are not the main purpose."
+    },
+    {
+      "id": "d3-003",
+      "domain": "domain3",
+      "concept": "Data Conversion",
+      "difficulty": 2,
+      "stem": "What is the GREATEST risk during data conversion?",
+      "options": [
+        "Storage cost",
+        "Time required",
+        "Data corruption or loss",
+        "User retraining"
+      ],
+      "answerIndex": 2,
+      "explanation": "Integrity risk dominates conversion. Reconciliation and validation controls mitigate corruption/loss."
+    },
+
+    {
+      "id": "d4-001",
+      "domain": "domain4",
+      "concept": "Business Impact Analysis",
+      "difficulty": 1,
+      "stem": "A business impact analysis (BIA) is performed to:",
+      "options": [
+        "Calculate disaster costs.",
+        "Identify critical processes and recovery time objectives (RTOs).",
+        "Select a recovery-site vendor.",
+        "Test the disaster recovery plan (DRP)."
+      ],
+      "answerIndex": 1,
+      "explanation": "BIA identifies critical processes, dependencies, and timing (RTO/RPO) to guide continuity strategies."
+    },
+    {
+      "id": "d4-002",
+      "domain": "domain4",
+      "concept": "Backup Testing",
+      "difficulty": 1,
+      "stem": "What is the BEST way to verify backup restorability?",
+      "options": [
+        "Review backup logs.",
+        "Perform a full restore in a test environment.",
+        "Check physical condition of media.",
+        "Verify the backup schedule."
+      ],
+      "answerIndex": 1,
+      "explanation": "Only a test restore proves you can recover and that data is intact; logs/schedules are not sufficient."
+    },
+    {
+      "id": "d4-003",
+      "domain": "domain4",
+      "concept": "Incident Response",
+      "difficulty": 1,
+      "stem": "Which is the FIRST step in incident response?",
+      "options": [
+        "Eradication",
+        "Containment",
+        "Identification",
+        "Recovery"
+      ],
+      "answerIndex": 2,
+      "explanation": "You must detect and identify the incident before containment, eradication, and recovery."
+    },
+
+    {
+      "id": "d5-001",
+      "domain": "domain5",
+      "concept": "Authentication",
+      "difficulty": 1,
+      "stem": "Which provides the STRONGEST authentication?",
+      "options": [
+        "Complex password",
+        "Biometric scan",
+        "Password plus one-time password (OTP)",
+        "Security question"
+      ],
+      "answerIndex": 2,
+      "explanation": "Combining different factors (knowledge + possession) is MFA and is stronger than any single factor."
+    },
+    {
+      "id": "d5-002",
+      "domain": "domain5",
+      "concept": "Least Privilege",
+      "difficulty": 1,
+      "stem": "The principle of least privilege means:",
+      "options": [
+        "Only minimal access needed for job duties.",
+        "Same baseline access for all users.",
+        "Access based on seniority.",
+        "Temporary elevation on request without approval."
+      ],
+      "answerIndex": 0,
+      "explanation": "Grant no more access than required for assigned tasks; other options contradict the principle."
+    },
+    {
+      "id": "d5-003",
+      "domain": "domain5",
+      "concept": "Data Classification",
+      "difficulty": 1,
+      "stem": "The PRIMARY goal of data classification is to:",
+      "options": [
+        "Choose a storage location.",
+        "Set a monetary value for data.",
+        "Determine required protection level.",
+        "Identify the data owner."
+      ],
+      "answerIndex": 2,
+      "explanation": "Classification maps sensitivity/criticality to handling and controls. Owner identification may be part of governance, but protection levels are the main purpose."
+    }
+  ]
+}
