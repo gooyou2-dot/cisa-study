@@ -1,5 +1,5 @@
 {
-  "meta": { "name": "Core 600", "version": "1.0", "id": "core-600-v1" },
+  "meta": { "name": "Core Starter 30", "version": "1.0", "id": "core-30-v1" },
   "items": [
     {
       "id": "d1-001",
@@ -8,183 +8,329 @@
       "difficulty": 2,
       "stem": "What is the PRIMARY purpose of an IS audit charter?",
       "options": [
-        "Document procedures for an engagement.",
-        "Outline audit cost and timeline.",
-        "Grant authority, scope, and responsibilities.",
-        "List report distribution stakeholders."
+        "Document procedures for an individual engagement",
+        "Outline audit budgeting and timelines",
+        "Grant authority, scope, and responsibilities for the audit function",
+        "List recipients of the final report"
       ],
       "answerIndex": 2,
-      "explanation": "The charter establishes mandate, authority, independence, and scope for the audit function; procedures and timelines belong in the plan, not the charter."
+      "explanation": "The charter establishes mandate, independence, and scope. Procedures/timelines are engagement-level artifacts; distribution lists are report housekeeping."
     },
     {
       "id": "d1-002",
       "domain": "domain1",
       "concept": "Audit Evidence",
       "difficulty": 1,
-      "stem": "Which source is the MOST reliable audit evidence?",
+      "stem": "Which source provides the MOST reliable audit evidence?",
       "options": [
         "Inquiry of management",
-        "System-generated report",
+        "Internal system report without validation",
         "Direct observation by the auditor",
         "Third-party confirmation"
       ],
       "answerIndex": 3,
-      "explanation": "Independent third-party evidence is highest reliability. Observation is good but narrower; internal reports and inquiries are less reliable."
+      "explanation": "Independent third-party confirmations are strongest. Observation is good but narrower; internal reports and management inquiry are weaker."
     },
     {
       "id": "d1-003",
       "domain": "domain1",
       "concept": "Risk-Based Auditing",
       "difficulty": 2,
-      "stem": "When using a risk-based audit approach, an IS auditor should FIRST:",
+      "stem": "When adopting a risk-based audit approach, what should the IS auditor do FIRST?",
       "options": [
-        "Evaluate existing controls.",
-        "Identify threats and vulnerabilities.",
-        "Understand business objectives and processes.",
-        "Perform compliance testing."
+        "Evaluate existing technical controls",
+        "Identify known threats and vulnerabilities",
+        "Understand business processes and objectives",
+        "Perform compliance testing"
       ],
       "answerIndex": 2,
-      "explanation": "Business context comes first; it drives risk assessment and control evaluation. Threats/controls are assessed after understanding objectives."
+      "explanation": "Business context drives risk. Threats/controls come after understanding objectives. Compliance testing is not first."
     },
-
+    {
+      "id": "d1-004",
+      "domain": "domain1",
+      "concept": "Sampling",
+      "difficulty": 2,
+      "stem": "Which sampling method is MOST appropriate when exceptions are rare but critical (e.g., fraud)?",
+      "options": [
+        "Attribute sampling",
+        "Variable sampling",
+        "Stratified sampling",
+        "Discovery sampling"
+      ],
+      "answerIndex": 3,
+      "explanation": "Discovery sampling is designed to detect at least one occurrence of rare events. Attribute/variable/stratified sampling serve different aims."
+    },
+    {
+      "id": "d1-005",
+      "domain": "domain1",
+      "concept": "Independence",
+      "difficulty": 2,
+      "stem": "Which situation MOST impairs auditor independence?",
+      "options": [
+        "Auditor previously reviewed the same process last year",
+        "Auditor helped design a control that is now being audited",
+        "Auditor uses workpapers from another team",
+        "Auditor sits in the same building as the auditees"
+      ],
+      "answerIndex": 1,
+      "explanation": "Designing controls that are being audited creates self-review threat. Prior reviews are normal; location and shared workpapers do not inherently impair independence."
+    },
+    {
+      "id": "d1-006",
+      "domain": "domain1",
+      "concept": "Assurance",
+      "difficulty": 1,
+      "stem": "Why do audit reports provide reasonable (not absolute) assurance?",
+      "options": [
+        "Auditors lack technical skills",
+        "Sampling, judgment, and inherent limitations prevent absolute certainty",
+        "Management sets the level of assurance",
+        "Audits only test one control"
+      ],
+      "answerIndex": 1,
+      "explanation": "Sampling and inherent limitations preclude absolute assurance. Skill and single-control testing are not the reason; management does not set assurance type."
+    },
     {
       "id": "d2-001",
       "domain": "domain2",
       "concept": "IT Governance",
       "difficulty": 1,
-      "stem": "A primary goal of IT governance is to:",
+      "stem": "The PRIMARY goal of IT governance is to:",
       "options": [
-        "Adopt the latest technology quickly.",
-        "Align IT strategy with business strategy.",
-        "Centralize the service desk.",
-        "Eliminate all IT risks."
+        "Adopt the latest technologies quickly",
+        "Align IT with business strategy and value delivery",
+        "Centralize all IT services",
+        "Eliminate all IT risk"
       ],
       "answerIndex": 1,
-      "explanation": "Governance ensures IT enables business objectives. Tech adoption and org structures are operational; eliminating all risk is unrealistic."
+      "explanation": "Governance ensures IT enables strategy and delivers value. Centralization and zero-risk are not governance goals; chasing new tech is not primary."
     },
     {
       "id": "d2-002",
       "domain": "domain2",
       "concept": "Steering Committee",
-      "difficulty": 2,
-      "stem": "The IT steering committee’s PRIMARY role is to:",
+      "difficulty": 1,
+      "stem": "What is the PRIMARY role of an IT steering committee?",
       "options": [
-        "Approve and prioritize IT investments.",
-        "Monitor day-to-day IT operations.",
-        "Write security policies.",
-        "Run vulnerability scans."
+        "Run daily IT operations",
+        "Approve and prioritize IT investments",
+        "Write security policies",
+        "Perform code reviews"
       ],
-      "answerIndex": 0,
-      "explanation": "The steering committee aligns portfolio choices with strategy and prioritizes investments. Ops and technical tasks sit elsewhere."
+      "answerIndex": 1,
+      "explanation": "Steering committees align investments to strategy and prioritize. Operations and coding are line-management activities; security policy drafting may involve others."
     },
     {
       "id": "d2-003",
       "domain": "domain2",
-      "concept": "Governance Roles",
-      "difficulty": 1,
-      "stem": "Who holds ultimate responsibility for IT governance?",
+      "concept": "Accountability",
+      "difficulty": 2,
+      "stem": "Who holds ULTIMATE responsibility for IT governance?",
       "options": [
-        "CIO",
+        "Chief Information Officer (CIO)",
         "IT steering committee",
-        "Board of directors",
-        "CISO"
+        "Board of Directors",
+        "Chief Information Security Officer (CISO)"
       ],
       "answerIndex": 2,
-      "explanation": "The board is ultimately accountable for enterprise governance, including IT. CIO/CISO execute; the steering committee advises."
+      "explanation": "The board is ultimately accountable for enterprise governance, including IT. CIO/CISO and committees operate under board oversight."
     },
-
+    {
+      "id": "d2-004",
+      "domain": "domain2",
+      "concept": "Policy",
+      "difficulty": 1,
+      "stem": "An information security policy is MOST effective when it is:",
+      "options": [
+        "Written by the audit department",
+        "Approved and championed by senior management",
+        "Fifty pages or longer",
+        "Updated only every five years"
+      ],
+      "answerIndex": 1,
+      "explanation": "Tone at the top and approval from senior management give policy authority. Length and infrequent updates reduce effectiveness; audit should not own policy."
+    },
+    {
+      "id": "d2-005",
+      "domain": "domain2",
+      "concept": "Frameworks",
+      "difficulty": 2,
+      "stem": "Which framework focuses primarily on governance and management of enterprise IT?",
+      "options": [
+        "ISO/IEC 27001",
+        "ITIL",
+        "COBIT",
+        "NIST Cybersecurity Framework"
+      ],
+      "answerIndex": 2,
+      "explanation": "COBIT is purpose-built for enterprise IT governance/management. ISO 27001 is ISMS certification, ITIL is service management, NIST CSF is cyber risk framework."
+    },
     {
       "id": "d3-001",
       "domain": "domain3",
-      "concept": "SDLC Phases",
+      "concept": "SDLC",
       "difficulty": 1,
-      "stem": "During which SDLC phase are user requirements formally defined?",
+      "stem": "In the SDLC, when are user/business requirements formally baselined?",
       "options": [
         "Design",
         "Development",
-        "Testing",
-        "Requirements gathering"
+        "Requirements/Analysis",
+        "User acceptance testing"
       ],
-      "answerIndex": 3,
-      "explanation": "Requirements (analysis) phase captures and validates business needs; design and build come after."
+      "answerIndex": 2,
+      "explanation": "Requirements are captured and validated in the analysis phase; design and development follow; UAT verifies built functionality."
     },
     {
       "id": "d3-002",
       "domain": "domain3",
       "concept": "Post-Implementation Review",
-      "difficulty": 1,
-      "stem": "The PRIMARY benefit of a post-implementation review (PIR) is to:",
+      "difficulty": 2,
+      "stem": "PRIMARY objective of a post-implementation review (PIR) is to:",
       "options": [
-        "Assign blame for delays.",
-        "Confirm business objectives were met.",
-        "Provide vendor payment sign-off.",
-        "Train end users."
+        "Assign blame for project delays",
+        "Confirm benefits realization and lessons learned",
+        "Approve vendor invoices",
+        "Train all end users"
       ],
       "answerIndex": 1,
-      "explanation": "PIR validates benefits realization and lessons learned. Blame, payment, and training are not the main purpose."
+      "explanation": "PIR validates that objectives/benefits were realized and captures lessons. Blame, invoices, and training are not PIR objectives."
     },
     {
       "id": "d3-003",
       "domain": "domain3",
       "concept": "Data Conversion",
       "difficulty": 2,
-      "stem": "What is the GREATEST risk during data conversion?",
+      "stem": "The GREATEST risk during data conversion is:",
       "options": [
-        "Storage cost",
-        "Time required",
+        "Higher storage costs",
+        "Extended project schedule",
         "Data corruption or loss",
-        "User retraining"
+        "User retraining needs"
       ],
       "answerIndex": 2,
-      "explanation": "Integrity risk dominates conversion. Reconciliation and validation controls mitigate corruption/loss."
+      "explanation": "Integrity risk dominates conversion; mapping/reconciliation controls are essential. Cost, schedule, and training are secondary."
     },
-
+    {
+      "id": "d3-004",
+      "domain": "domain3",
+      "concept": "Change Management",
+      "difficulty": 2,
+      "stem": "A formal change control process MOST helps ensure that changes are:",
+      "options": [
+        "Implemented rapidly",
+        "Authorized, tested, and documented",
+        "Designed only by senior developers",
+        "Within the IT budget"
+      ],
+      "answerIndex": 1,
+      "explanation": "Change control enforces authorization, testing, and documentation to reduce production risk. Speed and budget are not the primary goals."
+    },
     {
       "id": "d4-001",
       "domain": "domain4",
       "concept": "Business Impact Analysis",
       "difficulty": 1,
-      "stem": "A business impact analysis (BIA) is performed to:",
+      "stem": "A business impact analysis (BIA) is performed primarily to:",
       "options": [
-        "Calculate disaster costs.",
-        "Identify critical processes and recovery time objectives (RTOs).",
-        "Select a recovery-site vendor.",
-        "Test the disaster recovery plan (DRP)."
+        "Calculate total disaster cost",
+        "Identify critical processes, dependencies, and RTO/RPO",
+        "Pick a hot-site vendor",
+        "Test the disaster recovery plan"
       ],
       "answerIndex": 1,
-      "explanation": "BIA identifies critical processes, dependencies, and timing (RTO/RPO) to guide continuity strategies."
+      "explanation": "BIA determines criticality and recovery objectives. Vendor selection and DR testing come later; cost estimation is not the primary aim."
     },
     {
       "id": "d4-002",
       "domain": "domain4",
       "concept": "Backup Testing",
       "difficulty": 1,
-      "stem": "What is the BEST way to verify backup restorability?",
+      "stem": "BEST way to verify that backups are restorable is to:",
       "options": [
-        "Review backup logs.",
-        "Perform a full restore in a test environment.",
-        "Check physical condition of media.",
-        "Verify the backup schedule."
+        "Review backup job logs",
+        "Perform a periodic test restore",
+        "Check backup media labels",
+        "Verify backup schedules"
       ],
       "answerIndex": 1,
-      "explanation": "Only a test restore proves you can recover and that data is intact; logs/schedules are not sufficient."
+      "explanation": "Only a test restore proves recoverability and integrity; logs, labels, and schedules are indirect indicators."
     },
     {
       "id": "d4-003",
       "domain": "domain4",
       "concept": "Incident Response",
       "difficulty": 1,
-      "stem": "Which is the FIRST step in incident response?",
+      "stem": "The FIRST phase of incident response is:",
       "options": [
-        "Eradication",
         "Containment",
-        "Identification",
+        "Eradication",
+        "Identification/Detection",
         "Recovery"
       ],
       "answerIndex": 2,
-      "explanation": "You must detect and identify the incident before containment, eradication, and recovery."
+      "explanation": "You must detect/identify before containment and eradication. Recovery follows remediation."
     },
-
+    {
+      "id": "d4-004",
+      "domain": "domain4",
+      "concept": "BCP Metrics",
+      "difficulty": 1,
+      "stem": "Recovery Time Objective (RTO) represents:",
+      "options": [
+        "Maximum data loss tolerated",
+        "Time to detect an incident",
+        "Maximum acceptable downtime for a process/system",
+        "Frequency of backups"
+      ],
+      "answerIndex": 2,
+      "explanation": "RTO is maximum tolerable outage duration. Maximum data loss is RPO; other options are unrelated."
+    },
+    {
+      "id": "d4-005",
+      "domain": "domain4",
+      "concept": "DR Sites",
+      "difficulty": 1,
+      "stem": "A hot site is BEST characterized as:",
+      "options": [
+        "Space and utilities only",
+        "Hardware present but data/software must be restored",
+        "Fully equipped with hardware/software and near-real-time data",
+        "A cloud SaaS subscription"
+      ],
+      "answerIndex": 2,
+      "explanation": "Hot sites are near-immediate cutover facilities. Warm sites have hardware without current data; cold sites are space/utilities."
+    },
+    {
+      "id": "d4-006",
+      "domain": "domain4",
+      "concept": "Problem Management",
+      "difficulty": 2,
+      "stem": "Which finding is MOST concerning when reviewing problem management?",
+      "options": [
+        "Dedicated team resolves problems",
+        "Users are notified of outages",
+        "Root cause analysis is inconsistent",
+        "A knowledge base of past issues exists"
+      ],
+      "answerIndex": 2,
+      "explanation": "Without consistent root cause analysis, incidents will recur. The other items are positive practices."
+    },
+    {
+      "id": "d4-007",
+      "domain": "domain4",
+      "concept": "Capacity & Performance",
+      "difficulty": 2,
+      "stem": "A payments API shows rising latency at peak hours. What should operations do FIRST?",
+      "options": [
+        "Implement blue/green deployments",
+        "Analyze telemetry to identify bottlenecks and scale/optimize",
+        "Shorten development sprints",
+        "Switch database vendors immediately"
+      ],
+      "answerIndex": 1,
+      "explanation": "Measure before changes: analyze metrics (CPU, DB waits, network) and scale/optimize accordingly. The other choices are premature or unrelated."
+    },
     {
       "id": "d5-001",
       "domain": "domain5",
@@ -192,43 +338,118 @@
       "difficulty": 1,
       "stem": "Which provides the STRONGEST authentication?",
       "options": [
-        "Complex password",
-        "Biometric scan",
-        "Password plus one-time password (OTP)",
-        "Security question"
+        "Complex password only",
+        "Biometric only",
+        "Password plus one-time passcode (OTP)",
+        "Security questions"
       ],
       "answerIndex": 2,
-      "explanation": "Combining different factors (knowledge + possession) is MFA and is stronger than any single factor."
+      "explanation": "Multiple factors (knowledge + possession) are stronger than a single factor. Security questions are weakest."
     },
     {
       "id": "d5-002",
       "domain": "domain5",
       "concept": "Least Privilege",
       "difficulty": 1,
-      "stem": "The principle of least privilege means:",
+      "stem": "Least privilege means users should:",
       "options": [
-        "Only minimal access needed for job duties.",
-        "Same baseline access for all users.",
-        "Access based on seniority.",
-        "Temporary elevation on request without approval."
+        "Receive only the access necessary to perform their job",
+        "Share admin credentials for efficiency",
+        "Request broad access to avoid delays",
+        "Gain temporary rights after an incident"
       ],
       "answerIndex": 0,
-      "explanation": "Grant no more access than required for assigned tasks; other options contradict the principle."
+      "explanation": "Only necessary access should be granted. Sharing credentials and broad access violate the principle; incidents are not a trigger for more access."
     },
     {
       "id": "d5-003",
       "domain": "domain5",
       "concept": "Data Classification",
       "difficulty": 1,
-      "stem": "The PRIMARY goal of data classification is to:",
+      "stem": "The PRIMARY purpose of data classification is to:",
       "options": [
-        "Choose a storage location.",
-        "Set a monetary value for data.",
-        "Determine required protection level.",
-        "Identify the data owner."
+        "Choose the storage location",
+        "Assign a monetary value",
+        "Determine the level of protection and handling required",
+        "Identify the data owner"
       ],
       "answerIndex": 2,
-      "explanation": "Classification maps sensitivity/criticality to handling and controls. Owner identification may be part of governance, but protection levels are the main purpose."
+      "explanation": "Classification maps sensitivity/criticality to controls. Ownership and storage are related but not the primary objective."
+    },
+    {
+      "id": "d5-004",
+      "domain": "domain5",
+      "concept": "Encryption",
+      "difficulty": 1,
+      "stem": "Encryption primarily protects:",
+      "options": [
+        "Availability",
+        "Integrity",
+        "Confidentiality",
+        "Non-repudiation"
+      ],
+      "answerIndex": 2,
+      "explanation": "Encryption prevents unauthorized disclosure (confidentiality). Integrity and non-repudiation require additional controls (e.g., MACs, digital signatures)."
+    },
+    {
+      "id": "d5-005",
+      "domain": "domain5",
+      "concept": "Awareness",
+      "difficulty": 1,
+      "stem": "A key purpose of a security awareness program is to:",
+      "options": [
+        "Satisfy audit checklists",
+        "Reduce human-factor risk like phishing",
+        "Select security software",
+        "Replace technical controls"
+      ],
+      "answerIndex": 1,
+      "explanation": "Awareness measurably reduces social-engineering risk. It does not replace technical controls or choose software."
+    },
+    {
+      "id": "d5-006",
+      "domain": "domain5",
+      "concept": "Network Security",
+      "difficulty": 1,
+      "stem": "Where is a perimeter firewall MOST appropriately placed?",
+      "options": [
+        "Between the internal network and the Internet",
+        "Only in front of the web server",
+        "On every workstation",
+        "Inside the cloud provider’s network only"
+      ],
+      "answerIndex": 0,
+      "explanation": "A boundary firewall separates trusted internal networks from the untrusted Internet. Host firewalls and reverse proxies are complementary, not replacements."
+    },
+    {
+      "id": "d5-007",
+      "domain": "domain5",
+      "concept": "Segregation of Duties",
+      "difficulty": 2,
+      "stem": "Which control BEST enforces segregation of duties in application changes?",
+      "options": [
+        "Developers can push code directly to production during emergencies",
+        "Operations deploys to production from approved, tested builds",
+        "Developers have persistent admin accounts in production",
+        "Change tickets are optional for minor fixes"
+      ],
+      "answerIndex": 1,
+      "explanation": "Separating build/test approval from production deployment enforces SoD. Direct pushes and persistent admin access violate it; skipping tickets weakens control."
+    },
+    {
+      "id": "d5-008",
+      "domain": "domain5",
+      "concept": "Data Loss Prevention",
+      "difficulty": 2,
+      "stem": "To prevent unauthorized exfiltration of sensitive files to unsanctioned cloud storage, the BEST control is to:",
+      "options": [
+        "Increase password complexity",
+        "Block outbound traffic to all cloud providers",
+        "Implement DLP with content inspection and policy-based blocking",
+        "Rely on user training only"
+      ],
+      "answerIndex": 2,
+      "explanation": "DLP with inspection and blocking is targeted to exfiltration threats. Blanket blocking harms productivity; password complexity and training alone are insufficient."
     }
   ]
 }
