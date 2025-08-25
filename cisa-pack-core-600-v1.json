@@ -1,0 +1,308 @@
+# Create two JSON files for the user:
+# 1) A blank template they can fill in.
+# 2) A 30-question starter pack across all 5 domains for testing (unique stems, 6 per domain).
+
+import json, textwrap, os, uuid
+
+template = {
+    "meta": {"name": "Your Pack Name", "version": "1.0", "id": "your-pack-id"},
+    "items": [
+        {
+            "id": "d1-001",
+            "domain": "domain1",
+            "concept": "Topic",
+            "difficulty": 2,
+            "stem": "Question text here... (make each stem unique across the entire pack)",
+            "options": ["Option A", "Option B", "Option C", "Option D"],
+            "answerIndex": 0,
+            "explanation": "Short rationale with references if possible."
+        }
+    ]
+}
+
+# Build a 30-question sample pack (6 per domain)
+items = []
+
+def add_item(domain, concept, stem, options, correct_idx, explanation, diff=2, id_prefix=None, counter=None):
+    domain_map = {
+        "domain1": "d1",
+        "domain2": "d2",
+        "domain3": "d3",
+        "domain4": "d4",
+        "domain5": "d5",
+    }
+    prefix = id_prefix or domain_map[domain]
+    if counter is None:
+        # fallback to uuid short
+        iid = f"{prefix}-{uuid.uuid4().hex[:4]}"
+    else:
+        iid = f"{prefix}-{counter:03d}"
+    items.append({
+        "id": iid,
+        "domain": domain,
+        "concept": concept,
+        "difficulty": diff,
+        "stem": stem,
+        "options": options,
+        "answerIndex": correct_idx,
+        "explanation": explanation
+    })
+
+# Domain 1 (IS Auditing Process)
+d1 = [
+("Audit Charter", "Which statement BEST describes the IS audit charter?",
+ ["It defines audit timelines per engagement.",
+  "It grants authority, scope, and independence of the function.",
+  "It lists all systems to be audited this year.",
+  "It describes standard sampling tables only."], 1,
+ "A charter establishes mandate/authority, scope, and independence; plans and sampling are separate artifacts."
+),
+("Risk-Based Auditing", "FIRST step when planning a risk-based IS audit is to:",
+ ["Test key controls for operating effectiveness.",
+  "Map threats to specific technology assets.",
+  "Understand business objectives and critical processes.",
+  "Perform a walk-through of production changes."], 2,
+ "Context comes first: understand business objectives and critical processes, then assess risks and controls."
+),
+("Evidence Reliability", "MOST reliable audit evidence typically comes from:",
+ ["Inquiry of process owners.",
+  "System logs reviewed by operations.",
+  "Independent third-party confirmations.",
+  "Screenshots provided by developers."], 2,
+ "External, independent confirmations are generally most reliable; inquiries/screenshots are weaker."
+),
+("Sampling", "Discovery sampling is MOST useful when the auditor needs to:",
+ ["Estimate the average value of a population.",
+  "Project a monetary misstatement.",
+  "Gain assurance that a rare deviation, if present, will be detected.",
+  "Segment the population by risk tiers."], 2,
+ "Discovery sampling is designed to detect at least one occurrence of a rare deviation (e.g., fraud)."
+),
+("Reporting", "An IS audit report should primarily communicate:",
+ ["Departmental blame for control failures.",
+  "Root causes, risks, and potential business impact.",
+  "Preferred vendor solutions.",
+  "Exact fixes and dates mandated by the auditor."], 1,
+ "Auditors communicate findings, risk/impact, and recommendations; management chooses remediation."
+),
+("Independence", "Audit independence is MOST threatened when:",
+ ["Auditors report functionally to the audit committee.",
+  "Auditors previously designed the control being tested.",
+  "Auditors use CAATs for evidence analysis.",
+  "Auditors perform follow-up reviews."], 1,
+ "Designing the control under review impairs independence/objectivity due to self-review threat."
+),
+]
+
+# Domain 2 (Governance & Management of IT)
+d2 = [
+("IT Governance", "Primary objective of IT governance is to ensure:",
+ ["IT has the latest tools.",
+  "IT strategy enables and aligns with business goals.",
+  "Help desk SLAs are always met.",
+  "All IT risk is eliminated."], 1,
+ "Governance ensures value delivery and alignment; not tool chasing or zero-risk promises."
+),
+("Steering Committee", "An IT steering committee MOST often:",
+ ["Approves/prioritizes major IT initiatives.",
+  "Manages daily incident queues.",
+  "Writes system requirements.",
+  "Performs code reviews."], 0,
+ "Steering committees focus on investment/prioritization and alignment with strategy."
+),
+("Policies", "Information security policy is MOST effective when:",
+ ["It is authored and owned by the audit team.",
+  "It is approved and championed by senior management.",
+  "It is highly technical and lengthy.",
+  "It is updated every 5 years."], 1,
+ "Tone-at-the-top and approval from senior leadership gives policy authority and adoption."
+),
+("COBIT", "Which framework primarily targets governance/management of enterprise IT?",
+ ["ISO/IEC 27001",
+  "ITIL v4",
+  "COBIT",
+  "NIST SP 800-53"], 2,
+ "COBIT focuses on governance and management of enterprise IT; others focus on security or service mgmt."
+),
+("Risk Appetite", "Risk appetite is BEST defined as the level of risk:",
+ ["Assigned to each individual system.",
+  "That must be eliminated regardless of cost.",
+  "The organization is willing to accept in pursuit of objectives.",
+  "Ranked purely by likelihood."], 2,
+ "Risk appetite is a high-level statement of acceptable risk aligned to strategy and objectives."
+),
+("Org Roles", "Ultimate accountability for IT governance resides with the:",
+ ["CIO",
+  "IT steering committee",
+  "Board of directors",
+  "CISO"], 2,
+ "The board is ultimately accountable for governance, including IT governance."
+),
+]
+
+# Domain 3 (Acquisition, Development, Implementation)
+d3 = [
+("SDLC", "User/business requirements are formally baselined during:",
+ ["Design",
+  "Development",
+  "Requirements/analysis",
+  "User acceptance testing"], 2,
+ "The analysis/requirements phase captures and baselines stakeholder needs."
+),
+("Post-Implementation Review", "PRIMARY purpose of a post-implementation review is to:",
+ ["Assign blame for project delays.",
+  "Confirm intended business benefits were realized.",
+  "Approve vendor invoices.",
+  "Train end users."], 1,
+ "PIR validates benefit realization and captures lessons learned."
+),
+("Change Control", "Formal change control MOSTLY ensures that changes are:",
+ ["Implemented quickly to meet deadlines.",
+  "Authorized, tested, and documented before release.",
+  "Creative and unconstrained for developers.",
+  "Aligned to budget cycles."], 1,
+ "Change control reduces production risk through authorization, testing, and documentation."
+),
+("Data Conversion", "GREATEST risk during data conversion is:",
+ ["Extra storage cost.",
+  "Extended project timeline.",
+  "Data corruption or loss.",
+  "Confusion with UI themes."], 2,
+ "Integrity loss during conversion is the top risk; reconciliation and validation are key."
+),
+("Testing", "Which test validates the system under peak expected load?",
+ ["Unit test",
+  "Integration test",
+  "Stress/performance test",
+  "Smoke test"], 2,
+ "Stress/performance tests validate behavior under peak load and capacity limits."
+),
+("Agile Auditing", "In Agile environments, the IS auditor should:",
+ ["Perform a single big-bang audit at project end.",
+  "Join iterations to advise on risk/controls continuously.",
+  "Write user stories for developers.",
+  "Replace product owner when needed."], 1,
+ "Auditors engage continuously to advise on risk/controls across sprints."
+),
+]
+
+# Domain 4 (Operations & Business Resilience)
+d4 = [
+("BIA", "A business impact analysis (BIA) primarily identifies:",
+ ["Vendors for a hot site.",
+  "Critical processes and recovery objectives (RTO/RPO).",
+  "Costs of preventive controls only.",
+  "Preferred DR test dates."], 1,
+ "BIA determines criticality, dependencies, RTO/RPO—foundation for BCP/DRP."
+),
+("Backups", "BEST way to validate restorability of backups is to:",
+ ["Review backup logs for errors.",
+  "Perform a full test restore to a clean environment.",
+  "Check physical media condition.",
+  "Verify backup schedules monthly."], 1,
+ "Only a test restore proves usability of backups."
+),
+("Incident Response", "FIRST step of incident response lifecycle is typically:",
+ ["Containment",
+  "Eradication",
+  "Identification/Detection",
+  "Recovery"], 2,
+ "Detection/identification precedes containment and eradication."
+),
+("RTO", "Recovery Time Objective (RTO) defines:",
+ ["Maximum acceptable data loss window.",
+  "Time to detect an incident.",
+  "Maximum tolerable downtime for a process/system.",
+  "Backup frequency."], 2,
+ "RTO = max acceptable downtime; RPO covers data loss window."
+),
+("DR Sites", "A hot site is characterized by:",
+ ["Space/utilities only.",
+  "Full hardware/software and near-current data.",
+  "Hardware only; data restored later.",
+  "Cloud region in a warm climate."], 1,
+ "Hot sites are near-ready with data replication for rapid cutover."
+),
+("Problem Mgmt", "MOST concerning signal in problem management is:",
+ ["Dedicated resolver team exists.",
+  "Root cause analysis is inconsistent.",
+  "Users notified of outages.",
+  "Knowledge base maintained."], 1,
+ "Lack of RCA indicates reactive posture and recurring incidents."
+),
+]
+
+# Domain 5 (Protection of Information Assets)
+d5 = [
+("AuthN", "Strongest authentication approach among the following is:",
+ ["Long, complex password only",
+  "Biometric only",
+  "Password + one-time code (MFA)",
+  "Security questions"], 2,
+ "Combining factors (knowledge + possession) is stronger than any single factor."
+),
+("Least Privilege", "Least privilege means users receive:",
+ ["Access based on seniority level.",
+  "Minimum necessary access to perform duties.",
+  "Temporary admin on request.",
+  "The same baseline access as peers."], 1,
+ "Only the minimum necessary access reduces blast radius and misuse risk."
+),
+("Classification", "PRIMARY purpose of data classification is to:",
+ ["Pick a storage vendor.",
+  "Set monetary value of data.",
+  "Determine handling/protection requirements.",
+  "Identify data owner emails."], 2,
+ "Classification maps sensitivity/criticality to required handling and controls."
+),
+("Encryption", "Encryption primarily protects which attribute?",
+ ["Availability",
+  "Integrity",
+  "Confidentiality",
+  "Non-repudiation"], 2,
+ "Encryption hides content from unauthorized parties—confidentiality."
+),
+("Awareness", "A key objective of a security awareness program is to:",
+ ["Satisfy audit with paperwork.",
+  "Reduce human-factor risks like phishing.",
+  "Test incident response runbooks monthly.",
+  "Choose new antivirus tools."], 1,
+ "Awareness reduces people-driven risks (phishing, social engineering)."
+),
+("Network Security", "Baseline firewall placement is MOST commonly:",
+ ["Only in front of web server.",
+  "Between internal network and the Internet.",
+  "On every workstation.",
+  "Only in the cloud perimeter."], 1,
+ "Perimeter firewalls protect the internal network from the Internet; additional layers may exist."
+),
+]
+
+# Add items with sequential IDs
+for n, tpl in enumerate(d1, start=1):
+    add_item("domain1", *tpl, id_prefix="d1", counter=n)
+for n, tpl in enumerate(d2, start=1):
+    add_item("domain2", *tpl, id_prefix="d2", counter=n)
+for n, tpl in enumerate(d3, start=1):
+    add_item("domain3", *tpl, id_prefix="d3", counter=n)
+for n, tpl in enumerate(d4, start=1):
+    add_item("domain4", *tpl, id_prefix="d4", counter=n)
+for n, tpl in enumerate(d5, start=1):
+    add_item("domain5", *tpl, id_prefix="d5", counter=n)
+
+sample_pack = {
+    "meta": {"name": "CISA Core Sample (30)", "version": "1.0", "id": "cisa-sample-30"},
+    "items": items
+}
+
+# Write files
+template_path = "/mnt/data/cisa-question-pack-template.json"
+sample_path = "/mnt/data/cisa-pack-core-sample-30.json"
+
+with open(template_path, "w", encoding="utf-8") as f:
+    json.dump(template, f, indent=2)
+
+with open(sample_path, "w", encoding="utf-8") as f:
+    json.dump(sample_pack, f, indent=2)
+
+template_path, sample_path
